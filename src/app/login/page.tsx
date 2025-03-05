@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
 
-export default function loginPage(){
+export default function LoginPage(){
 	const [user,setUser]=React.useState({
 		email:"",
 		password:""
@@ -12,6 +12,7 @@ export default function loginPage(){
 	const router = useRouter();
 
 	const onLogin=async(e: React.FormEvent)=>{
+		console.log(error)
 		e.preventDefault()
 		setError("")
 		try {
@@ -24,9 +25,13 @@ export default function loginPage(){
 		if (!response.ok) throw new Error(data.error || "Login failed");
 		localStorage.setItem("token", data.token); // Store JWT token
 		router.push("/dashboard");
-		}catch (err:any) {
-			setError(err.message)
-			alert("Wrong credentials")
+		}catch (err: unknown) {
+			if (err instanceof Error) {
+				setError(err.message);
+			} else {
+				setError("An unknown error occurred");
+			}
+			alert("Wrong credentials");
 		}
 	}
 

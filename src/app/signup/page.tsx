@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 
 
-export default function signinPage(){
+export default function SigninPage(){
   
   const router = useRouter();
 
@@ -15,7 +15,10 @@ export default function signinPage(){
   })
   const [error, setError] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-
+  console.log(error);
+  console.log(loading);
+  
+  
   const onSignup = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent form reload
     setError("");
@@ -35,10 +38,13 @@ export default function signinPage(){
       alert("Signup successful! Redirecting to login...");
       router.push("/login"); // Redirect to login after successful signup
 
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {  
+      if (err instanceof Error) {  
+        setError(err.message);  
+      } else {  
+        setError("An unknown error occurred");  
+      }  
     }
-
     setLoading(false);
   };
 
